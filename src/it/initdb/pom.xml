@@ -1,67 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>ar.com.adrianboimvaser.it</groupId>
-	<artifactId>initdb</artifactId>
-	<version>1.0-SNAPSHOT</version>
+    <groupId>ar.com.adrianboimvaser.it</groupId>
+    <artifactId>initdb</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-	<description>Integration test for initdb goal.</description>
+    <description>Integration test for initdb goal.</description>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>unpack-postgresql</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.postgresql</groupId>
-									<artifactId>postgresql-dist</artifactId>
-									<classifier>windows</classifier>
-									<version>9.2.4-1</version>
-									<type>zip</type>
-									<!-- overwrite to clean any previous deployments -->
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>@project.groupId@</groupId>
-				<artifactId>@project.artifactId@</artifactId>
-				<version>@project.version@</version>
-				<configuration>
-					<pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
-					<dataDir>${project.build.directory}/data</dataDir>
-					<username>postgres</username>
-					<passwordFile>password.txt</passwordFile>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-postgresql</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>initdb</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>unpack-postgresql</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.postgresql</groupId>
+                                    <artifactId>postgresql-dist</artifactId>
+                                    <classifier>windows</classifier>
+                                    <version>9.2.4-1</version>
+                                    <type>zip</type>
+                                    <!-- overwrite to clean any previous 
+                                        deployments -->
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>@project.groupId@</groupId>
+                <artifactId>@project.artifactId@</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
+                    <dataDir>${project.build.directory}/data</dataDir>
+                    <username>postgres</username>
+                    <passwordFile>password.txt</passwordFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-postgresql</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>initdb</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
