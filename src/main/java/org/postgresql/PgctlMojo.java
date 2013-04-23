@@ -1,0 +1,38 @@
+package org.postgresql;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+public abstract class PgctlMojo extends AbstractMojo {
+
+	@Parameter(required = true)
+	protected String pgsqlHome;
+	
+	@Parameter(required = true)
+	protected String dataDir;
+	
+	@Parameter(defaultValue = "false")
+	private boolean silent;
+	
+	@Parameter
+	private Integer waitSeconds;
+	
+	@Parameter(defaultValue = "false")
+	private boolean wait;
+
+	public void execute() throws MojoExecutionException, MojoFailureException {
+		doExecute();
+	}
+
+	protected abstract void doExecute() throws MojoExecutionException;
+	
+
+}
