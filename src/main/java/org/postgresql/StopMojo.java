@@ -1,6 +1,5 @@
 package org.postgresql;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +12,10 @@ public class StopMojo extends PgctlMojo {
 
     @Override
     public void doExecute() throws MojoExecutionException {
-        final File pgsqlHomeFile = new File(pgsqlHome);
-
-        if (!pgsqlHomeFile.isDirectory()) {
-            throw new MojoExecutionException(String.format(
-                    "'%s' is not a valid directory.", pgsqlHome));
-        }
 
         final List<String> cmd = new ArrayList<String>();
         cmd.add(getCommandPath("pg_ctl"));
+
         cmd.add("-D");
         cmd.add(dataDir);
 
