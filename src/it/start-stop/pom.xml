@@ -23,18 +23,16 @@
                         <id>unpack-postgresql</id>
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>unpack</goal>
+                            <goal>copy</goal>
                         </goals>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.postgresql</groupId>
                                     <artifactId>postgresql-dist</artifactId>
-                                    <classifier>windows</classifier>
+                                    <classifier>${postgresql-dist.classifier}</classifier>
                                     <version>9.2.4-1</version>
-                                    <type>zip</type>
-                                    <!-- overwrite to clean any previous 
-                                        deployments -->
+                                    <type>${postgresql-dist.type}</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}</outputDirectory>
                                 </artifactItem>
@@ -49,13 +47,29 @@
                 <version>1.2.1</version>
                 <executions>
                     <execution>
+                        <id>unzip-postgresql</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>tar</executable>
+                            <arguments>
+                                <argument>-zxvf</argument>
+                                <argument>${project.build.directory}/postgresql-dist-9.2.4-1-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
+                                <argument>-C</argument>
+                                <argument>${project.build.directory}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>init-db</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${project.build.directory}/pgsql/bin/initdb.exe</executable>
+                            <executable>${project.build.directory}/pgsql/bin/initdb</executable>
                             <arguments>
                                 <argument>-D</argument>
                                 <argument>${project.build.directory}/data</argument>

@@ -1,2 +1,2 @@
-File touchFile = new File( basedir, "target/data/pg_hba.conf" );
+File touchFile = new File( basedir, "target/data/postgresql.conf" );
 assert touchFile.isFile()

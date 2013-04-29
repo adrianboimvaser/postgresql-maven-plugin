@@ -9,8 +9,7 @@
 
     <name>postgresql-maven-plugin Maven Plugin</name>
 
-    <!-- FIXME change it to the project's website -->
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/adrianboimvaser/postgresql-maven-plugin</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,7 +67,75 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
+
+	<profiles>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<name>Linux</name>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<postgresql-dist.classifier>linux</postgresql-dist.classifier>
+				<postgresql-dist.type>tar.gz</postgresql-dist.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux-x64</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<name>Linux</name>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			<properties>
+				<postgresql-dist.classifier>linux-x64</postgresql-dist.classifier>
+				<postgresql-dist.type>tar.gz</postgresql-dist.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<postgresql-dist.classifier>windows</postgresql-dist.classifier>
+				<postgresql-dist.type>zip</postgresql-dist.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>windows-x64</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			<properties>
+				<postgresql-dist.classifier>windows-x64</postgresql-dist.classifier>
+				<postgresql-dist.type>zip</postgresql-dist.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>osx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<postgresql-dist.classifier>osx</postgresql-dist.classifier>
+				<postgresql-dist.type>zip</postgresql-dist.type>
+			</properties>
+		</profile>
+
         <profile>
             <id>run-its</id>
             <build>
@@ -90,6 +157,10 @@
                                 <goal>clean</goal>
                                 <goal>install</goal>
                             </goals>
+                            <properties>
+                            	<postgresql-dist.classifier>${postgresql-dist.classifier}</postgresql-dist.classifier>
+                            	<postgresql-dist.type>${postgresql-dist.type}</postgresql-dist.type>
+                            </properties>
                         </configuration>
                         <executions>
                             <execution>

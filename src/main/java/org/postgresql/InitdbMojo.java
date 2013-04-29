@@ -13,7 +13,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "initdb")
 public class InitdbMojo extends PgsqlMojo {
 
-    @Parameter(required = true)
+	@Parameter(required = true)
     protected String dataDir;
 
     @Parameter(required = true)
@@ -31,7 +31,7 @@ public class InitdbMojo extends PgsqlMojo {
         }
 
         final List<String> cmd = new ArrayList<String>();
-        cmd.add(pgsqlHome + "\\bin\\initdb.exe");
+        cmd.add(getCommandPath("initdb"));
         cmd.add("-D");
         cmd.add(dataDir);
         cmd.add("-U");
@@ -46,6 +46,5 @@ public class InitdbMojo extends PgsqlMojo {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 }

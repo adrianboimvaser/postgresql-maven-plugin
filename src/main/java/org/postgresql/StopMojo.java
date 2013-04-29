@@ -21,7 +21,7 @@ public class StopMojo extends PgctlMojo {
         }
 
         final List<String> cmd = new ArrayList<String>();
-        cmd.add(pgsqlHome + "\\bin\\pg_ctl.exe");
+        cmd.add(getCommandPath("pg_ctl"));
         cmd.add("-D");
         cmd.add(dataDir);
 
