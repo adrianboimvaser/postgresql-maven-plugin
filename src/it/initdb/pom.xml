@@ -16,60 +16,11 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>unpack-postgresql</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.postgresql</groupId>
-                                    <artifactId>postgresql-dist</artifactId>
-                                    <classifier>${postgresql-dist.classifier}</classifier>
-                                    <version>9.2.4-1</version>
-                                    <type>${postgresql-dist.type}</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <id>unzip-postgresql</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>tar</executable>
-                            <arguments>
-                                <argument>-zxvf</argument>
-                                <argument>${project.build.directory}/postgresql-dist-9.2.4-1-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
-                                <argument>-C</argument>
-                                <argument>${project.build.directory}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>@project.groupId@</groupId>
                 <artifactId>@project.artifactId@</artifactId>
                 <version>@project.version@</version>
                 <configuration>
-                    <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
+                    <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
                     <dataDir>${project.build.directory}/data</dataDir>
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
