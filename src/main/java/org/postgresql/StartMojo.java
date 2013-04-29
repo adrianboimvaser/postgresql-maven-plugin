@@ -31,11 +31,9 @@ public class StartMojo extends PgctlMojo {
             Process process = processBuilder.start();
             Thread.sleep(500);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            getLog().error(e);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            getLog().error(e);
         }
     }
 }

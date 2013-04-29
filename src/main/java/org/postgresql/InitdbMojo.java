@@ -39,8 +39,7 @@ public class InitdbMojo extends PgsqlMojo {
         try {
             Process process = processBuilder.start();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            getLog().error(e);
         }
     }
 }
