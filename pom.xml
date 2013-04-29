@@ -11,6 +11,12 @@
 
     <url>https://github.com/adrianboimvaser/postgresql-maven-plugin</url>
 
+    <scm>
+        <url>https://github.com/adrianboimvaser/postgresql-maven-plugin.git</url>
+        <connection>scm:git:git://github.com/adrianboimvaser/postgresql-maven-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/adrianboimvaser/postgresql-maven-plugin.git</developerConnection>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -182,7 +188,7 @@
                         <version>2.6</version>
                         <executions>
                             <execution>
-                                <id>unpack-postgresql</id>
+                                <id>copy-postgresql-linux</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>copy</goal>
@@ -209,7 +215,7 @@
                         <version>1.2.1</version>
                         <executions>
                             <execution>
-                                <id>unzip-postgresql</id>
+                                <id>unzip-postgresql-linux</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -243,7 +249,7 @@
                         <version>2.6</version>
                         <executions>
                             <execution>
-                                <id>unpack-postgresql</id>
+                                <id>unpack-postgresql-windows</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>unpack</goal>
