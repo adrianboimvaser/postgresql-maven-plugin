@@ -10,8 +10,8 @@ public abstract class PgsqlMojo extends AbstractMojo {
     @Parameter(required = true)
     protected String pgsqlHome;
 
-	protected String getCommandPath(String command) {
-		return new File(new File(pgsqlHome, "bin"), command).getAbsolutePath();
-	}
+    protected String getCommandPath(String command) {
+        return new File(new File(pgsqlHome, "bin"), command).getAbsolutePath();
+    }
 
 }

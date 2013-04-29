@@ -13,7 +13,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "initdb")
 public class InitdbMojo extends PgsqlMojo {
 
-	@Parameter(required = true)
+    @Parameter(required = true)
     protected String dataDir;
 
     @Parameter(required = true)
