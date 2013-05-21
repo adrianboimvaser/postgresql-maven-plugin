@@ -21,7 +21,7 @@ public class CreatedbMojo extends PgsqlMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
 
         final List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("initdb"));
+        cmd.add(getCommandPath("createdb"));
 
         cmd.add("-U");
         cmd.add(username);
