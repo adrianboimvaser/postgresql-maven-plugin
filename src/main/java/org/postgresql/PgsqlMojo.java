@@ -23,4 +23,12 @@ public abstract class PgsqlMojo extends AbstractMojo {
         return new File(new File(pgsqlHome, "bin"), command).getAbsolutePath();
     }
 
+    protected void logOutput(Process process) {
+        StreamLogger outputLogger = new OutputLogger(getLog(), process.getInputStream());
+        new Thread(outputLogger).run();
+    
+        StreamLogger errorLogger = new ErrorLogger(getLog(), process.getErrorStream());
+        new Thread(errorLogger).run();
+    }
+
 }

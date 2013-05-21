@@ -76,6 +76,7 @@
                 <artifactId>maven-invoker-plugin</artifactId>
                 <version>1.7</version>
                 <configuration>
+                    <skipInvocation>${skipITs}</skipInvocation>
                     <debug>true</debug>
                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                     <pomIncludes>
@@ -194,6 +195,7 @@
                                     <goal>copy</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skipITs}</skip>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.postgresql</groupId>
@@ -221,6 +223,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skipITs}</skip>
                                     <executable>tar</executable>
                                     <arguments>
                                         <argument>-zxvf</argument>
@@ -255,6 +258,7 @@
                                     <goal>unpack</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skipITs}</skip>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.postgresql</groupId>

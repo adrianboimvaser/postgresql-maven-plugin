@@ -29,7 +29,9 @@ public class StartMojo extends PgctlMojo {
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
             Process process = processBuilder.start();
-            Thread.sleep(500);
+            logOutput(process);
+            int returnValue = process.waitFor();
+            getLog().debug("pg_ctl returned " + returnValue);
         } catch (IOException e) {
             getLog().error(e);
         } catch (InterruptedException e) {

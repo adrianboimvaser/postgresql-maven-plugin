@@ -27,7 +27,12 @@ public class StopMojo extends PgctlMojo {
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
             Process process = processBuilder.start();
+            logOutput(process);
+            int returnValue = process.waitFor();
+            getLog().debug("pg_ctl returned " + returnValue);
         } catch (IOException e) {
+            getLog().error(e);
+        } catch (InterruptedException e) {
             getLog().error(e);
         }
     }
