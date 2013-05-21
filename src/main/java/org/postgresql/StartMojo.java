@@ -28,10 +28,11 @@ public class StartMojo extends PgctlMojo {
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
+            getLog().info("Startig PostgreSQL");
             Process process = processBuilder.start();
-            logOutput(process);
-            int returnValue = process.waitFor();
-            getLog().debug("pg_ctl returned " + returnValue);
+            // TODO: there should be a way to run this process detached, maybe
+            // watch the output stream and return when it says it's done.
+            Thread.sleep(1000);
         } catch (IOException e) {
             getLog().error(e);
         } catch (InterruptedException e) {
