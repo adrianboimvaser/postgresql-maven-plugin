@@ -1,6 +1,9 @@
 package org.postgresql;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +33,23 @@ public class StartMojo extends PgctlMojo {
         try {
             getLog().info("Startig PostgreSQL");
             Process process = processBuilder.start();
-            // TODO: there should be a way to run this process detached, maybe
-            // watch the output stream and return when it says it's done.
-            Thread.sleep(1000);
+
+            InputStream input = process.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input ));
+            
+            String line = null;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    getLog().info(line);
+                    //TODO: change to English, force the command to use English
+                    if (line.equals("servidor iniciado")) {
+                        return;
+                    }
+                }
+            } catch (IOException e) {
+                getLog().error(e);
+            }
         } catch (IOException e) {
-            getLog().error(e);
-        } catch (InterruptedException e) {
             getLog().error(e);
         }
     }
