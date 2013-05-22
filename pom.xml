@@ -2,9 +2,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ar.com.adrianboimvaser</groupId>
+    <groupId>com.github.adrianboimvaser</groupId>
     <artifactId>postgresql-maven-plugin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>postgresql-maven-plugin Maven Plugin</name>
@@ -198,7 +198,7 @@
                                     <skip>${skipITs}</skip>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>org.postgresql</groupId>
+                                            <groupId>com.github.adrianboimvaser.postresql.plugin</groupId>
                                             <artifactId>postgresql-dist</artifactId>
                                             <classifier>${postgresql-dist.classifier}</classifier>
                                             <version>9.2.4-1</version>
@@ -261,7 +261,7 @@
                                     <skip>${skipITs}</skip>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>org.postgresql</groupId>
+                                            <groupId>com.github.adrianboimvaser.postresql.plugin</groupId>
                                             <artifactId>postgresql-dist</artifactId>
                                             <classifier>${postgresql-dist.classifier}</classifier>
                                             <version>9.2.4-1</version>

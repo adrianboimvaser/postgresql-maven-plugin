@@ -1,4 +1,4 @@
-package org.postgresql;
+package com.github.adrianboimvaser.postresql.plugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;

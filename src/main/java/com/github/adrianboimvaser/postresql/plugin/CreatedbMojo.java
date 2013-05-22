@@ -1,4 +1,4 @@
-package org.postgresql;
+package com.github.adrianboimvaser.postresql.plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,17 +9,14 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "initdb")
-public class InitdbMojo extends PgsqlMojo {
-
-    @Parameter(required = true)
-    protected String dataDir;
+@Mojo(name = "createdb")
+public class CreatedbMojo extends PgsqlMojo {
 
     @Parameter(required = true)
     protected String username;
 
     @Parameter(required = true)
-    protected String passwordFile;
+    protected String databaseName;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -34,7 +31,7 @@ public class InitdbMojo extends PgsqlMojo {
             Process process = processBuilder.start();
             logOutput(process);
             int returnValue = process.waitFor();
-            getLog().debug("initdb returned " + returnValue);
+            getLog().debug("createdb returned " + returnValue);
         } catch (IOException e) {
             getLog().error(e);
         } catch (InterruptedException e) {
@@ -44,16 +41,12 @@ public class InitdbMojo extends PgsqlMojo {
 
     private List<String> createCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("initdb"));
-
-        cmd.add("-D");
-        cmd.add(dataDir);
+        cmd.add(getCommandPath("createdb"));
 
         cmd.add("-U");
         cmd.add(username);
 
-        cmd.add("--pwfile");
-        cmd.add(passwordFile);
+        cmd.add(databaseName);
 
         return cmd;
     }

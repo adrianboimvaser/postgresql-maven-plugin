@@ -1,4 +1,4 @@
-package org.postgresql;
+package com.github.adrianboimvaser.postresql.plugin;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

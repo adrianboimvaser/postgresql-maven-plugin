@@ -1,17 +1,31 @@
-package org.postgresql;
+package com.github.adrianboimvaser.postresql.plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "stop")
-public class StopMojo extends PgctlMojo {
+@Mojo(name = "initdb")
+public class InitdbMojo extends PgsqlMojo {
 
-    @Override
-    public void doExecute() throws MojoExecutionException {
+    @Parameter(required = true)
+    protected String dataDir;
+
+    @Parameter(required = true)
+    protected String username;
+
+    @Parameter(required = true)
+    protected String passwordFile;
+
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().debug("Skipped.");
+            return;
+        }
 
         final List<String> cmd = createCommand();
 
@@ -20,7 +34,7 @@ public class StopMojo extends PgctlMojo {
             Process process = processBuilder.start();
             logOutput(process);
             int returnValue = process.waitFor();
-            getLog().debug("pg_ctl returned " + returnValue);
+            getLog().debug("initdb returned " + returnValue);
         } catch (IOException e) {
             getLog().error(e);
         } catch (InterruptedException e) {
@@ -30,15 +44,16 @@ public class StopMojo extends PgctlMojo {
 
     private List<String> createCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("pg_ctl"));
+        cmd.add(getCommandPath("initdb"));
 
         cmd.add("-D");
         cmd.add(dataDir);
 
-        cmd.add("-m");
-        cmd.add("fast");
+        cmd.add("-U");
+        cmd.add(username);
 
-        cmd.add("stop");
+        cmd.add("--pwfile");
+        cmd.add(passwordFile);
 
         return cmd;
     }
