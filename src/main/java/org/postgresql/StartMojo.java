@@ -14,6 +14,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "start")
 public class StartMojo extends PgctlMojo {
 
+    private static final String SERVER_STARTED = "server started";
+
     @Parameter
     protected String log;
     
@@ -46,6 +48,8 @@ public class StartMojo extends PgctlMojo {
         cmd.add("start");
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+        processBuilder.environment().put("LC_ALL", "en_US.UTF-8");
+
         try {
             getLog().info("Startig PostgreSQL");
             Process process = processBuilder.start();
@@ -53,12 +57,12 @@ public class StartMojo extends PgctlMojo {
             InputStream input = process.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(input ));
             
+            // Wait for pg_ctl to output "server started" before returning
             String line = null;
             try {
                 while ((line = reader.readLine()) != null) {
                     getLog().info(line);
-                    //TODO: change to English, force the command to use English
-                    if (line.equals("servidor iniciado")) {
+                    if (line.equals(SERVER_STARTED)) {
                         return;
                     }
                 }
