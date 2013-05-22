@@ -22,6 +22,10 @@ public class InitdbMojo extends PgsqlMojo {
     protected String passwordFile;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().debug("Skipped.");
+            return;
+        }
 
         final List<String> cmd = new ArrayList<String>();
         cmd.add(getCommandPath("initdb"));

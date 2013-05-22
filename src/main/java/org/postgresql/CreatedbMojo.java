@@ -19,6 +19,10 @@ public class CreatedbMojo extends PgsqlMojo {
     protected String databaseName;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().debug("Skipped.");
+            return;
+        }
 
         final List<String> cmd = new ArrayList<String>();
         cmd.add(getCommandPath("createdb"));

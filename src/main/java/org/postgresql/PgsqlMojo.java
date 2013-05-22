@@ -11,6 +11,9 @@ public abstract class PgsqlMojo extends AbstractMojo {
     @Parameter(required = true)
     protected String pgsqlHome;
 
+    @Parameter
+    protected boolean skip;
+
     protected String getCommandPath(String command) throws MojoExecutionException {
 
         final File pgsqlHomeFile = new File(pgsqlHome);
