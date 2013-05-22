@@ -16,38 +16,24 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <id>init-db</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>@project.build.directory@/pgsql/bin/initdb</executable>
-                            <arguments>
-                                <argument>-D</argument>
-                                <argument>${project.build.directory}/data</argument>
-                                <argument>-U</argument>
-                                <argument>postgres</argument>
-                                <argument>--pwfile=password.txt</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>@project.groupId@</groupId>
                 <artifactId>@project.artifactId@</artifactId>
                 <version>@project.version@</version>
                 <configuration>
                     <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
                     <dataDir>${project.build.directory}/data</dataDir>
+                    <log>${project.build.directory}/postgres.log</log>
+                    <username>postgres</username>
+                    <passwordFile>password.txt</passwordFile>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>initdb</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>initdb</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>start-postgresql</id>
                         <phase>pre-integration-test</phase>

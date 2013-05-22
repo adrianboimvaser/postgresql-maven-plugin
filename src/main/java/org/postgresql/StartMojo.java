@@ -9,9 +9,16 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 @Mojo(name = "start")
 public class StartMojo extends PgctlMojo {
+
+    @Parameter
+    protected String log;
+    
+    @Parameter
+    protected boolean quiet;
 
     @Override
     public void doExecute() throws MojoExecutionException {
@@ -22,9 +29,18 @@ public class StartMojo extends PgctlMojo {
         cmd.add("-D");
         cmd.add(dataDir);
 
+        if (log == null) {
+            log = dataDir + "\\server.log";
+        }
         cmd.add("-l");
-        cmd.add(dataDir + "\\server.log");
+        cmd.add(log);
+        
+        if (quiet) {
+            // Print only errors, no informational messages.
+            cmd.add("-s");
+        }
 
+        // Wait for the startup or shutdown to complete.
         cmd.add("-w");
 
         cmd.add("start");
