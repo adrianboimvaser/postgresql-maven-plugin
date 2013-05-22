@@ -4,7 +4,7 @@
 
     <groupId>com.github.adrianboimvaser</groupId>
     <artifactId>postgresql-maven-plugin</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>postgresql-maven-plugin Maven Plugin</name>
@@ -32,7 +32,7 @@
         <url>https://github.com/adrianboimvaser/postgresql-maven-plugin.git</url>
         <connection>scm:git:git://github.com/adrianboimvaser/postgresql-maven-plugin.git</connection>
         <developerConnection>scm:git:https://github.com/adrianboimvaser/postgresql-maven-plugin.git</developerConnection>
-        <tag>v0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
