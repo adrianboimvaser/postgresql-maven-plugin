@@ -11,6 +11,23 @@
 
     <url>https://github.com/adrianboimvaser/postgresql-maven-plugin</url>
 
+    <description>This is Maven plugin for doing things with a PostgreSQL database, like starting, stopping, initializing a DB, etc. The main purpose is running integration tests.</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>adrianboimvaser</id>
+            <name>Adrián Boimvaser</name>
+            <email>adrianboimvaser@gmail.com</email>
+        </developer>
+    </developers>
+
     <scm>
         <url>https://github.com/adrianboimvaser/postgresql-maven-plugin.git</url>
         <connection>scm:git:git://github.com/adrianboimvaser/postgresql-maven-plugin.git</connection>
