@@ -25,27 +25,7 @@ public class StartMojo extends PgctlMojo {
     @Override
     public void doExecute() throws MojoExecutionException {
 
-        final List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("pg_ctl"));
-
-        cmd.add("-D");
-        cmd.add(dataDir);
-
-        if (log == null) {
-            log = dataDir + "\\server.log";
-        }
-        cmd.add("-l");
-        cmd.add(log);
-        
-        if (quiet) {
-            // Print only errors, no informational messages.
-            cmd.add("-s");
-        }
-
-        // Wait for the startup or shutdown to complete.
-        cmd.add("-w");
-
-        cmd.add("start");
+        final List<String> cmd = createCommand();
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         processBuilder.environment().put("LC_ALL", "en_US.UTF-8");
@@ -72,5 +52,31 @@ public class StartMojo extends PgctlMojo {
         } catch (IOException e) {
             getLog().error(e);
         }
+    }
+
+    private List<String> createCommand() throws MojoExecutionException {
+        List<String> cmd = new ArrayList<String>();
+        cmd.add(getCommandPath("pg_ctl"));
+
+        cmd.add("-D");
+        cmd.add(dataDir);
+
+        if (log == null) {
+            log = dataDir + "\\server.log";
+        }
+        cmd.add("-l");
+        cmd.add(log);
+        
+        if (quiet) {
+            // Print only errors, no informational messages.
+            cmd.add("-s");
+        }
+
+        // Wait for the startup or shutdown to complete.
+        cmd.add("-w");
+
+        cmd.add("start");
+
+        return cmd;
     }
 }

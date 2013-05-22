@@ -13,16 +13,7 @@ public class StopMojo extends PgctlMojo {
     @Override
     public void doExecute() throws MojoExecutionException {
 
-        final List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("pg_ctl"));
-
-        cmd.add("-D");
-        cmd.add(dataDir);
-
-        cmd.add("-m");
-        cmd.add("fast");
-
-        cmd.add("stop");
+        final List<String> cmd = createCommand();
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
@@ -35,5 +26,20 @@ public class StopMojo extends PgctlMojo {
         } catch (InterruptedException e) {
             getLog().error(e);
         }
+    }
+
+    private List<String> createCommand() throws MojoExecutionException {
+        List<String> cmd = new ArrayList<String>();
+        cmd.add(getCommandPath("pg_ctl"));
+
+        cmd.add("-D");
+        cmd.add(dataDir);
+
+        cmd.add("-m");
+        cmd.add("fast");
+
+        cmd.add("stop");
+
+        return cmd;
     }
 }

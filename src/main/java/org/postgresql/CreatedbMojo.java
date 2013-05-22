@@ -24,13 +24,7 @@ public class CreatedbMojo extends PgsqlMojo {
             return;
         }
 
-        final List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("createdb"));
-
-        cmd.add("-U");
-        cmd.add(username);
-
-        cmd.add(databaseName);
+        final List<String> cmd = createCommand();
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
@@ -43,5 +37,17 @@ public class CreatedbMojo extends PgsqlMojo {
         } catch (InterruptedException e) {
             getLog().error(e);
         }
+    }
+
+    private List<String> createCommand() throws MojoExecutionException {
+        List<String> cmd = new ArrayList<String>();
+        cmd.add(getCommandPath("createdb"));
+
+        cmd.add("-U");
+        cmd.add(username);
+
+        cmd.add(databaseName);
+
+        return cmd;
     }
 }

@@ -27,17 +27,7 @@ public class InitdbMojo extends PgsqlMojo {
             return;
         }
 
-        final List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("initdb"));
-
-        cmd.add("-D");
-        cmd.add(dataDir);
-
-        cmd.add("-U");
-        cmd.add(username);
-
-        cmd.add("--pwfile");
-        cmd.add(passwordFile);
+        final List<String> cmd = createCommand();
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
@@ -50,5 +40,21 @@ public class InitdbMojo extends PgsqlMojo {
         } catch (InterruptedException e) {
             getLog().error(e);
         }
+    }
+
+    private List<String> createCommand() throws MojoExecutionException {
+        List<String> cmd = new ArrayList<String>();
+        cmd.add(getCommandPath("initdb"));
+
+        cmd.add("-D");
+        cmd.add(dataDir);
+
+        cmd.add("-U");
+        cmd.add(username);
+
+        cmd.add("--pwfile");
+        cmd.add(passwordFile);
+
+        return cmd;
     }
 }
