@@ -1,6 +1,7 @@
 package com.github.adrianboimvaser.postresql.plugin;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -62,7 +63,7 @@ public class StartMojo extends PgctlMojo {
         cmd.add(dataDir);
 
         if (log == null) {
-            log = dataDir + "\\server.log";
+            log = new File(dataDir, "postgres.log").getAbsolutePath();
         }
         cmd.add("-l");
         cmd.add(log);
