@@ -265,10 +265,10 @@
                                     <skip>${skipITs}</skip>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>com.github.adrianboimvaser.postresql.plugin</groupId>
+                                            <groupId>com.github.adrianboimvaser</groupId>
                                             <artifactId>postgresql-dist</artifactId>
                                             <classifier>${postgresql-dist.classifier}</classifier>
-                                            <version>9.2.4-1</version>
+                                            <version>9.2.4</version>
                                             <type>${postgresql-dist.type}</type>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
@@ -294,7 +294,7 @@
                                     <executable>tar</executable>
                                     <arguments>
                                         <argument>-zxvf</argument>
-                                        <argument>${project.build.directory}/postgresql-dist-9.2.4-1-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
+                                        <argument>${project.build.directory}/postgresql-dist-9.2.4-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
                                         <argument>-C</argument>
                                         <argument>${project.build.directory}</argument>
                                     </arguments>
@@ -331,7 +331,7 @@
                                             <groupId>com.github.adrianboimvaser</groupId>
                                             <artifactId>postgresql-dist</artifactId>
                                             <classifier>${postgresql-dist.classifier}</classifier>
-                                            <version>9.2.4-1</version>
+                                            <version>9.2.4</version>
                                             <type>${postgresql-dist.type}</type>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
