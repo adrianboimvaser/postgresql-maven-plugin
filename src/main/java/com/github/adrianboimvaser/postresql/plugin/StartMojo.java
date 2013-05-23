@@ -1,10 +1,5 @@
 package com.github.adrianboimvaser.postresql.plugin;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,68 +10,94 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "start")
 public class StartMojo extends PgctlMojo {
 
-    private static final String SERVER_STARTED = "server started";
+    @Parameter
+    private String logfile;
 
     @Parameter
-    protected String log;
-    
+    private Integer port;
+
     @Parameter
-    protected boolean quiet;
+    private String username;
 
     @Override
     public void doExecute() throws MojoExecutionException {
 
-        final List<String> cmd = createCommand();
+        List<String> cmd = createPostgresCommand();
 
-        final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-        processBuilder.environment().put("LC_ALL", "en_US.UTF-8");
+        ProcessBuilder processBuilder = new ProcessBuilder(cmd);
 
         try {
             getLog().info("Startig PostgreSQL");
             Process process = processBuilder.start();
+            destroyOnShutdown(process);
 
-            InputStream input = process.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input ));
-            
-            // Wait for pg_ctl to output "server started" before returning
-            String line = null;
-            try {
-                while ((line = reader.readLine()) != null) {
-                    getLog().info(line);
-                    if (line.equals(SERVER_STARTED)) {
-                        return;
-                    }
-                }
-            } catch (IOException e) {
-                getLog().error(e);
+            // Wait for the server to start before returning
+            while (!started()) {
+                Thread.sleep(1000);
             }
-        } catch (IOException e) {
+            getLog().info("server started");
+
+        } catch (Exception e) {
             getLog().error(e);
         }
     }
 
-    private List<String> createCommand() throws MojoExecutionException {
+    private void destroyOnShutdown(final Process process) {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                process.destroy();
+            }
+        });
+    }
+
+    private boolean started() {
+        // As mentioned in http://www.postgresql.org/docs/9.0/static/app-pg-ctl.html
+        // a successful psql -l indicates success.
+        try {
+            List<String> cmd = createPsqlCommand();
+            ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+            Process process = processBuilder.start();
+            process.waitFor();
+            return process.exitValue() == 0;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<String> createPsqlCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("pg_ctl"));
+        cmd.add(getCommandPath("psql"));
+        cmd.add("-l");
+
+        if (username != null) {
+            cmd.add("-U");
+            cmd.add(username);
+        }
+
+        if (port != null) {
+            cmd.add("-p");
+            cmd.add(port.toString());
+        }
+        return cmd;
+    }
+
+    private List<String> createPostgresCommand() throws MojoExecutionException {
+        List<String> cmd = new ArrayList<String>();
+        cmd.add(getCommandPath("postgres"));
 
         cmd.add("-D");
         cmd.add(dataDir);
 
-        if (log == null) {
-            log = new File(dataDir, "postgres.log").getAbsolutePath();
-        }
-        cmd.add("-l");
-        cmd.add(log);
-        
-        if (quiet) {
-            // Print only errors, no informational messages.
-            cmd.add("-s");
+        if (logfile != null) {
+            cmd.add("-r");
+            cmd.add(logfile);
         }
 
-        // Wait for the startup or shutdown to complete.
-        cmd.add("-w");
-
-        cmd.add("start");
+        if (port != null) {
+            cmd.add("-p");
+            cmd.add(port.toString());
+        }
 
         return cmd;
     }

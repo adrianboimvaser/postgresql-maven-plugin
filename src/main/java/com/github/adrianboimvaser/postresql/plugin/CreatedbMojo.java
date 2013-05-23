@@ -12,11 +12,14 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "createdb")
 public class CreatedbMojo extends PgsqlMojo {
 
-    @Parameter(required = true)
+    @Parameter
     protected String username;
 
     @Parameter(required = true)
     protected String databaseName;
+
+    @Parameter
+    protected Integer port;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -43,8 +46,15 @@ public class CreatedbMojo extends PgsqlMojo {
         List<String> cmd = new ArrayList<String>();
         cmd.add(getCommandPath("createdb"));
 
-        cmd.add("-U");
-        cmd.add(username);
+        if (port != null) {
+            cmd.add("-p");
+            cmd.add(port.toString());
+        }
+
+        if (username != null) {
+            cmd.add("-U");
+            cmd.add(username);
+        }
 
         cmd.add(databaseName);
 
