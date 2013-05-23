@@ -1,6 +1,7 @@
 package com.github.adrianboimvaser.postresql.plugin;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,10 @@ public class InitdbMojo extends PgsqlMojo {
     @Parameter(required = true)
     protected String dataDir;
 
-    @Parameter(required = true)
+    @Parameter
     protected String username;
 
-    @Parameter(required = true)
+    @Parameter
     protected String passwordFile;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -49,11 +50,15 @@ public class InitdbMojo extends PgsqlMojo {
         cmd.add("-D");
         cmd.add(dataDir);
 
-        cmd.add("-U");
-        cmd.add(username);
+        if (username != null) {
+            cmd.add("-U");
+            cmd.add(username);
+        }
 
-        cmd.add("--pwfile");
-        cmd.add(passwordFile);
+        if (passwordFile != null) {
+            cmd.add("--pwfile");
+            cmd.add(passwordFile);
+        }
 
         return cmd;
     }
