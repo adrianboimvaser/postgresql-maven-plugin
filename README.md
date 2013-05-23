@@ -1,6 +1,5 @@
-postgresql-maven-plugin
-=======================
+# postgresql-maven-plugin [![Build Status](https://travis-ci.org/adrianboimvaser/postgresql-maven-plugin.png)](https://travis-ci.org/adrianboimvaser/postgresql-maven-plugin)
 
-This is Maven plugin for doing things with a PostgreSQL database, like starting, stopping, initializing a DB, etc. The main purpose is running integration tests.
+A [Maven](http://maven.apache.org/) plugin for controlling a PostgreSQL. There are goals for starting, stopping, initializing a DB, etc. The main purpose is running integration tests.
 
-The project is in a very early stage. Currently there are only 3 goals with very little options.
+The project is in a very early stage. Currently there are only 4 goals with very little options.
