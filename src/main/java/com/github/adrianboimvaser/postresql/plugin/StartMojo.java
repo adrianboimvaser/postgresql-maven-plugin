@@ -1,5 +1,9 @@
 package com.github.adrianboimvaser.postresql.plugin;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +15,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 public class StartMojo extends PgctlMojo {
 
     @Parameter
-    private String logfile;
+    private File logfile;
 
     @Parameter
     private Integer port;
@@ -29,6 +33,9 @@ public class StartMojo extends PgctlMojo {
         try {
             getLog().info("Startig PostgreSQL");
             Process process = processBuilder.start();
+            if (logfile != null) {
+                sendOutputToLogFile(process);
+            }
             destroyOnShutdown(process);
 
             // Wait for the server to start before returning
@@ -40,6 +47,14 @@ public class StartMojo extends PgctlMojo {
         } catch (Exception e) {
             getLog().error(e);
         }
+    }
+
+    private void sendOutputToLogFile(Process process) {
+        // As documented in http://www.postgresql.org/docs/9.0/static/app-postgres.html
+        // in normal multiuser mode logging output is sent to stderr.
+        FileLogger logger = new FileLogger(process.getErrorStream());
+        Thread t = new Thread(logger);
+        t.start();
     }
 
     private void destroyOnShutdown(final Process process) {
@@ -89,16 +104,34 @@ public class StartMojo extends PgctlMojo {
         cmd.add("-D");
         cmd.add(dataDir);
 
-        if (logfile != null) {
-            cmd.add("-r");
-            cmd.add(logfile);
-        }
-
         if (port != null) {
             cmd.add("-p");
             cmd.add(port.toString());
         }
 
         return cmd;
+    }
+
+    private class FileLogger implements Runnable {
+
+        private InputStream input;
+
+        public FileLogger(InputStream input) {
+            this.input = input;
+        }
+
+        public void run() {
+            try (FileOutputStream log = new FileOutputStream(logfile)) {
+                byte[] buffer = new byte[1024];
+                int len = input.read(buffer);
+                while (len != -1) {
+                    log.write(buffer, 0, len);
+                    log.flush();
+                    len = input.read(buffer);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

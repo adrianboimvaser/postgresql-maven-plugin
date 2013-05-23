@@ -22,7 +22,7 @@
                 <configuration>
                     <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
                     <dataDir>${project.build.directory}/data</dataDir>
-                    <log>${project.build.directory}/postgres.log</log>
+                    <logfile>${project.build.directory}/postgres.log</logfile>
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
                 </configuration>
