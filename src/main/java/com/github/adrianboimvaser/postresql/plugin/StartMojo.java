@@ -31,7 +31,7 @@ public class StartMojo extends PgctlMojo {
         ProcessBuilder processBuilder = new ProcessBuilder(cmd);
 
         try {
-            getLog().info("Startig PostgreSQL");
+            getLog().info("Starting PostgreSQL");
             Process process = processBuilder.start();
             if (logfile != null) {
                 sendOutputToLogFile(process);
