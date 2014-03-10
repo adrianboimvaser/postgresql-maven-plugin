@@ -48,6 +48,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <postgresql-dist.version>9.2.4</postgresql-dist.version>
     </properties>
 
     <dependencies>
@@ -246,7 +247,7 @@
             <activation>
                 <os>
                     <family>unix</family>
-                    <name>Linux</name>
+                    <!-- tested on Linux and OSX -->
                 </os>
             </activation>
             <build>
@@ -268,7 +269,7 @@
                                             <groupId>com.github.adrianboimvaser</groupId>
                                             <artifactId>postgresql-dist</artifactId>
                                             <classifier>${postgresql-dist.classifier}</classifier>
-                                            <version>9.2.4</version>
+                                            <version>${postgresql-dist.version}</version>
                                             <type>${postgresql-dist.type}</type>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
@@ -294,7 +295,7 @@
                                     <executable>tar</executable>
                                     <arguments>
                                         <argument>-zxvf</argument>
-                                        <argument>${project.build.directory}/postgresql-dist-9.2.4-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
+                                        <argument>${project.build.directory}/postgresql-dist-${postgresql-dist.version}-${postgresql-dist.classifier}.${postgresql-dist.type}</argument>
                                         <argument>-C</argument>
                                         <argument>${project.build.directory}</argument>
                                     </arguments>
@@ -331,7 +332,7 @@
                                             <groupId>com.github.adrianboimvaser</groupId>
                                             <artifactId>postgresql-dist</artifactId>
                                             <classifier>${postgresql-dist.classifier}</classifier>
-                                            <version>9.2.4</version>
+                                            <version>${postgresql-dist.version}</version>
                                             <type>${postgresql-dist.type}</type>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
