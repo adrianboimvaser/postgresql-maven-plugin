@@ -34,6 +34,9 @@ public class InitdbMojo extends PgsqlMojo {
         }
 
         final List<String> cmd = createCommand();
+        if (getLog().isDebugEnabled()) {
+            getLog().debug(cmd.toString());
+        }
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {

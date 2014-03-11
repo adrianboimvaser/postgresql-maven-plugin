@@ -14,6 +14,9 @@ public class StopMojo extends PgctlMojo {
     public void doExecute() throws MojoExecutionException {
 
         final List<String> cmd = createCommand();
+        if (getLog().isDebugEnabled()) {
+            getLog().debug(cmd.toString());
+        }
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
         try {
