@@ -14,6 +14,8 @@ Usage example:
             <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
             <dataDir>${project.build.directory}/data</dataDir>
             <skip>${skipITs}</skip>
+            <databaseName>postgres</databaseName>
+            <username>postgres</username>
         </configuration>
         <executions>
             <execution>
