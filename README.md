@@ -9,7 +9,7 @@ Usage example:
     <plugin>
         <groupId>ar.com.adrianboimvaser</groupId>
         <artifactId>postgresql-maven-plugin</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.2-SNAPSHOT</version>
         <configuration>
             <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
             <dataDir>${project.build.directory}/data</dataDir>
@@ -25,6 +25,8 @@ Usage example:
                 <configuration>
                     <username>postgres</username>
                     <passwordFile>${basedir}/password.txt</passwordFile>
+                    <encoding>UTF8</encoding>
+                    <locale>en_US</locale>
                 </configuration>
             </execution>
             <execution>
