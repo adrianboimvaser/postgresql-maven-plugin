@@ -24,6 +24,7 @@
                     <dataDir>${project.build.directory}/data</dataDir>
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
+                    <encoding>UTF8</encoding>
                 </configuration>
                 <executions>
                     <execution>

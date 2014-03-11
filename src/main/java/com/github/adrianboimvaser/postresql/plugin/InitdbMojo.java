@@ -21,6 +21,9 @@ public class InitdbMojo extends PgsqlMojo {
     @Parameter
     protected String passwordFile;
 
+    @Parameter
+    protected String encoding;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().debug("Skipped.");
@@ -57,6 +60,11 @@ public class InitdbMojo extends PgsqlMojo {
         if (passwordFile != null) {
             cmd.add("--pwfile");
             cmd.add(passwordFile);
+        }
+
+        if (encoding != null) {
+            cmd.add("--encoding");
+            cmd.add(encoding);
         }
 
         return cmd;
