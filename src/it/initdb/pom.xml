@@ -25,6 +25,7 @@
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
                     <encoding>UTF8</encoding>
+                    <locale>sv_SE</locale>
                 </configuration>
                 <executions>
                     <execution>
