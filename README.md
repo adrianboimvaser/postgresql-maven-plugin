@@ -7,7 +7,7 @@ The project is in a very early stage. Currently there are only 4 goals with very
 Usage example:
 
     <plugin>
-        <groupId>ar.com.adrianboimvaser</groupId>
+        <groupId>com.github.adrianboimvaser</groupId>
         <artifactId>postgresql-maven-plugin</artifactId>
         <version>0.2-SNAPSHOT</version>
         <configuration>
