@@ -26,6 +26,8 @@
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
                     <timeoutInSeconds>60</timeoutInSeconds>
+                    <encoding>UTF8</encoding>
+                    <locale>sv_SE</locale>
                 </configuration>
                 <executions>
                     <execution>
@@ -70,6 +72,7 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>default</id>
                         <phase>integration-test</phase>
                         <goals>
                             <goal>execute</goal>
@@ -77,6 +80,21 @@
                         <configuration>
                             <sqlCommand>SELECT * FROM
                                 information_schema.tables</sqlCommand>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>encoding-check</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/sql-output.csv</outputFile>
+                            <printResultSet>true</printResultSet>
+                            <sqlCommand>
+                                select encoding, pg_encoding_to_char(encoding), datcollate, datdba
+                                from pg_database where datname = current_database();
+                            </sqlCommand>
                         </configuration>
                     </execution>
                 </executions>
