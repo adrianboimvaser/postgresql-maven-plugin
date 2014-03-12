@@ -35,7 +35,7 @@
                             <goal>version</goal>
                         </goals>
                         <configuration>
-                            <minimumVersion>[9.2,)</minimumVersion>
+                            <mandatoryVersionRange>[9.2,)</mandatoryVersionRange>
                         </configuration>
                     </execution>
                 </executions>

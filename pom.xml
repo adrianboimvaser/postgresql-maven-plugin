@@ -7,7 +7,7 @@
     <version>0.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
-    <name>postgresql-maven-plugin Maven Plugin</name>
+    <name>PostgreSQL Maven Plugin</name>
 
     <url>https://github.com/adrianboimvaser/postgresql-maven-plugin</url>
 

@@ -23,13 +23,13 @@ public class PgVersionMojo extends PgsqlMojo {
     static final String PATTERN = "psql \\(PostgreSQL\\) ([0-9]+\\.[0-9]+\\.[0-9]+)";
 
     /**
-     * When specified, the build will fail if the available Postgresql version does not meet the minimum requirement.
-     * Based on (and implemented using) Maven Enforcer. See
+     * When specified, the build will fail if the available Postgresql version does not comply with the
+     * given version range specification. Based on (and implemented using) Maven Enforcer. See
      * <a href="http://maven.apache.org/enforcer/enforcer-rules/versionRanges.html"
-     * >Version Range Specification</a>
+     * >Version Range Specification</a>.
      */
     @Parameter
-    private String minimumVersion;
+    private String mandatoryVersionRange;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -50,14 +50,14 @@ public class PgVersionMojo extends PgsqlMojo {
                 result = IOUtil.toString(isr);
                 getLog().info(result);
             }
-            if (minimumVersion != null) {
+            if (mandatoryVersionRange != null) {
                 final Matcher matcher = Pattern.compile(PATTERN).matcher(result);
                 if (matcher.groupCount() != 1) {
                     getLog().warn("Unable to match version number");
                     return;
                 }
                 final String version = matcher.replaceAll("$1");
-                RequirePostgresqlVersion.Builder.matchRange(minimumVersion)
+                RequirePostgresqlVersion.Builder.matchRange(mandatoryVersionRange)
                         .withVersion(version)
                         .build()
                         .execute(getLog());
