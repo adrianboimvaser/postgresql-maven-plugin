@@ -2,7 +2,7 @@
 
 A [Maven](http://maven.apache.org/) plugin for controlling [PostgreSQL](http://www.postgresql.org/). There are goals for starting, stopping, initializing a DB, etc. The main purpose is running integration tests.
 
-The project is in a very early stage. Currently there are only 4 goals with very few options.
+The project is in a very early stage. Currently there are only 5 goals with very few options.
 
 Usage example:
 
@@ -18,6 +18,16 @@ Usage example:
             <username>postgres</username>
         </configuration>
         <executions>
+            <execution>
+                <id>version-check</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                    <goal>version</goal>
+                </goals>
+                <configuration>
+                    <mandatoryVersionRange>[9.2,)</mandatoryVersionRange>
+                </configuration>
+            </execution>
             <execution>
                 <id>init-db</id>
                 <phase>pre-integration-test</phase>
@@ -58,3 +68,4 @@ Usage example:
             </execution>
         </executions>
     </plugin>
+
