@@ -1,4 +1,4 @@
-package com.github.adrianboimvaser.postresql.plugin;
+package com.github.adrianboimvaser.postgresql.plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,30 +9,27 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "createdb")
-public class CreatedbMojo extends PgsqlMojo {
+@Mojo(name = "initdb")
+public class InitdbMojo extends PgsqlMojo {
+
+    @Parameter(required = true)
+    protected String dataDir;
 
     @Parameter
     protected String username;
 
-    @Parameter(required = true)
-    protected String databaseName;
+    @Parameter
+    protected String passwordFile;
 
     @Parameter
-    protected String description;
+    protected String encoding;
 
     @Parameter
-    protected String host;
+    protected String locale;
 
-    @Parameter
-    protected Integer port;
-
-    @Parameter
-    protected String template;
-
-    /** If specified, password prompts are disabled (may result in an error) */
-    @Parameter(alias = "no-password", defaultValue = "false", property = "no-password")
-    protected String noPassword;
+    /** The {@code --data-checksums} option was added in PostgreSQL 9.3. Will be used if present and not {@code false}. */
+    @Parameter(alias = "data-checksums")
+    protected String dataChecksums;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -53,11 +50,11 @@ public class CreatedbMojo extends PgsqlMojo {
             Process process = processBuilder.start();
             logOutput(process);
             returnValue = process.waitFor();
-            message = "createdb returned " + returnValue;
+            message = "initdb returned " + returnValue;
             getLog().debug(message);
         } catch (IOException|InterruptedException e) {
-            message = e.getLocalizedMessage();
             cause = e;
+            message = e.getLocalizedMessage();
             getLog().error(e);
         }
         if (returnValue != 0 && failOnError) {
@@ -67,35 +64,33 @@ public class CreatedbMojo extends PgsqlMojo {
 
     private List<String> createCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("createdb"));
+        cmd.add(getCommandPath("initdb"));
 
-        if (host != null) {
-            cmd.add("-h");
-            cmd.add(host);
-        }
-
-        if (port != null) {
-            cmd.add("-p");
-            cmd.add(port.toString());
-        }
+        cmd.add("-D");
+        cmd.add(dataDir);
 
         if (username != null) {
             cmd.add("-U");
             cmd.add(username);
         }
 
-        if (template != null) {
-            cmd.add("-T");
-            cmd.add(template);
+        if (passwordFile != null) {
+            cmd.add("--pwfile");
+            cmd.add(passwordFile);
         }
 
-        if (trueBooleanString(noPassword)) {
+        if (encoding != null) {
+            cmd.add("--encoding");
+            cmd.add(encoding);
+        }
+
+        if (locale != null) {
+            cmd.add("--locale");
+            cmd.add(locale);
+        }
+
+        if (trueBooleanString(dataChecksums)) {
             cmd.add("--no-password");
-        }
-
-        cmd.add(databaseName);
-        if (description != null) {
-            cmd.add(description);
         }
 
         return cmd;

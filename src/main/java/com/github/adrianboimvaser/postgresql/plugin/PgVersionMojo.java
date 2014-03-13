@@ -1,6 +1,6 @@
-package com.github.adrianboimvaser.postresql.plugin;
+package com.github.adrianboimvaser.postgresql.plugin;
 
-import com.github.adrianboimvaser.postresql.plugin.enforcer.RequirePostgresqlVersion;
+import com.github.adrianboimvaser.postgresql.plugin.enforcer.RequirePostgresqlVersion;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;

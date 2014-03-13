@@ -1,4 +1,4 @@
-package com.github.adrianboimvaser.postresql.plugin.enforcer;
+package com.github.adrianboimvaser.postgresql.plugin.enforcer;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
