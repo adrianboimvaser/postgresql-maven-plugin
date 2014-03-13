@@ -39,15 +39,22 @@ public class InitdbMojo extends PgsqlMojo {
         }
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+        String message = "";
+        Exception cause = null;
+        int returnValue = Integer.MIN_VALUE;
         try {
             Process process = processBuilder.start();
             logOutput(process);
-            int returnValue = process.waitFor();
-            getLog().debug("initdb returned " + returnValue);
-        } catch (IOException e) {
+            returnValue = process.waitFor();
+            message = "initdb returned " + returnValue;
+            getLog().debug(message);
+        } catch (IOException|InterruptedException e) {
+            cause = e;
+            message = e.getLocalizedMessage();
             getLog().error(e);
-        } catch (InterruptedException e) {
-            getLog().error(e);
+        }
+        if (returnValue != 0 && failOnError) {
+            throw new MojoExecutionException(message, cause);
         }
     }
 

@@ -14,6 +14,10 @@ public abstract class PgsqlMojo extends AbstractMojo {
     @Parameter
     protected boolean skip;
 
+    /** By default, most failed operations will not fail the build. This enables build failure. */
+    @Parameter
+    protected boolean failOnError;
+
     protected String getCommandPath(String command) throws MojoExecutionException {
 
         final File pgsqlHomeFile = new File(pgsqlHome);
