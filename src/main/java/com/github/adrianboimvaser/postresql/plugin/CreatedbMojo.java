@@ -89,12 +89,8 @@ public class CreatedbMojo extends PgsqlMojo {
             cmd.add(template);
         }
 
-        if (noPassword != null) {
-            // accept zero-or-more whitespace, or `true`
-            noPassword = noPassword.trim().toLowerCase();
-            if ("".equals(noPassword) || "true".equals(noPassword)) {
-                cmd.add("--no-password");
-            }
+        if (trueBooleanString(noPassword)) {
+            cmd.add("--no-password");
         }
 
         cmd.add(databaseName);
