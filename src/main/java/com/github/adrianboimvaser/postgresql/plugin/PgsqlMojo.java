@@ -46,28 +46,4 @@ public abstract class PgsqlMojo extends AbstractMojo {
         new Thread(errorLogger).run();
     }
 
-    /**
-     * Returns {@code true} if {@code arg} is not {@code null} and consists of
-     * zero-or-more whitespace, or is case-insensitively "{@code true}".
-     *
-     * <p>
-     * In the POM, it can be specified as {@code &lt;argname/&gt;} or
-     * {@code &lt;argname&gt;  &lt;/argname&gt;} or
-     * {@code &lt;argname&gt;  TRUE  &lt;/argname&gt;}, etc., all of which will cause
-     * this method to return true. Non-whitespace values that are not equivalent to
-     * the case-insensitive value {@code true} will cause this method to return false.
-     * </p>
-     *
-     * <p>
-     * Some properties may be specified on the command line (e.g. {@code mvn -Dargname},
-     * and this method exists to explicitly support such usage.
-     * </p>
-     */
-    protected static boolean trueBooleanString(String arg) {
-        if (arg != null) {
-            arg = arg.trim().toLowerCase();
-            return "".equals(arg) || "true".equals(arg);
-        }
-        return false;
-    }
 }

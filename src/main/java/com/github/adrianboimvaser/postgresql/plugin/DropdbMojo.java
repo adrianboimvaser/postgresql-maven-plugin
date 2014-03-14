@@ -9,8 +9,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name = "createdb")
-public class CreatedbMojo extends PgsqlMojo {
+@Mojo(name = "dropdb")
+public class DropdbMojo extends PgsqlMojo {
 
     @Parameter
     protected String username;
@@ -19,16 +19,14 @@ public class CreatedbMojo extends PgsqlMojo {
     protected String databaseName;
 
     @Parameter
-    protected String description;
-
-    @Parameter
     protected String host;
 
     @Parameter
     protected Integer port;
 
-    @Parameter
-    protected String template;
+    /** If specified, no error will be reported when dropping a non-existent database */
+    @Parameter(alias = "if-exists", property = "if-exists", defaultValue = "false")
+    protected boolean ifExists;
 
     /** If specified, password prompts are disabled (may result in an error) */
     @Parameter(alias = "no-password", property = "no-password", defaultValue = "false")
@@ -53,7 +51,7 @@ public class CreatedbMojo extends PgsqlMojo {
             Process process = processBuilder.start();
             logOutput(process);
             returnValue = process.waitFor();
-            message = "createdb returned " + returnValue;
+            message = "dropdb returned " + returnValue;
             getLog().debug(message);
         } catch (IOException|InterruptedException e) {
             message = e.getLocalizedMessage();
@@ -67,7 +65,7 @@ public class CreatedbMojo extends PgsqlMojo {
 
     private List<String> createCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("createdb"));
+        cmd.add(getCommandPath("dropdb"));
 
         if (host != null) {
             cmd.add("-h");
@@ -84,9 +82,8 @@ public class CreatedbMojo extends PgsqlMojo {
             cmd.add(username);
         }
 
-        if (template != null) {
-            cmd.add("-T");
-            cmd.add(template);
+        if (ifExists) {
+            cmd.add("--if-exists");
         }
 
         if (noPassword) {
@@ -94,10 +91,6 @@ public class CreatedbMojo extends PgsqlMojo {
         }
 
         cmd.add(databaseName);
-        if (description != null) {
-            cmd.add(description);
-        }
-
         return cmd;
     }
 }

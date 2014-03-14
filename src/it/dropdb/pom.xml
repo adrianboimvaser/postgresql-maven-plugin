@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.adrianboimvaser.it</groupId>
+    <artifactId>initdb</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <description>Integration test for initdb goal.</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>@project.groupId@</groupId>
+                <artifactId>@project.artifactId@</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
+                    <dataDir>${project.build.directory}/data</dataDir>
+                    <username>postgres</username>
+                    <passwordFile>password.txt</passwordFile>
+                    <encoding>UTF8</encoding>
+                    <locale>sv_SE</locale>
+                    <databaseName>createanddrop</databaseName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>initdb</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>initdb</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>start-postgresql</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>createdb</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>createdb</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>dropdb</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>dropdb</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>dropdb2</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>dropdb</goal>
+                        </goals>
+                        <configuration>
+                            <if-exists>true</if-exists>
+                            <noPassword>true</noPassword>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-postgresql</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
