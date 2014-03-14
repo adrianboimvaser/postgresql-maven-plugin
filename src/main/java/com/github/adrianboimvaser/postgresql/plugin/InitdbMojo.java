@@ -28,8 +28,8 @@ public class InitdbMojo extends PgsqlMojo {
     protected String locale;
 
     /** The {@code --data-checksums} option was added in PostgreSQL 9.3. Will be used if present and not {@code false}. */
-    @Parameter(alias = "data-checksums")
-    protected String dataChecksums;
+    @Parameter(alias = "data-checksums", property = "data-checksums", defaultValue = "false")
+    protected boolean dataChecksums;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -89,7 +89,7 @@ public class InitdbMojo extends PgsqlMojo {
             cmd.add(locale);
         }
 
-        if (trueBooleanString(dataChecksums)) {
+        if (dataChecksums) {
             cmd.add("--no-password");
         }
 
