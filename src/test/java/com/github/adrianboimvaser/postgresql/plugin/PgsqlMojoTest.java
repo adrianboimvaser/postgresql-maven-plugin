@@ -25,9 +25,4 @@ public class PgsqlMojoTest {
             }
         }.getCommandPath("pg_ctl").endsWith("/bin/pg_ctl"));
     }
-
-    @Test
-    public void testTrueBooleanString() {
-        assertTrue(mojo.trueBooleanString("\t\n\r\t\n"));
-    }
 }
