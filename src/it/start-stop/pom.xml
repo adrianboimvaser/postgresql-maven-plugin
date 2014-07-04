@@ -25,6 +25,7 @@
                     <logfile>${project.build.directory}/postgres.log</logfile>
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
+                    <usePgCtl>true</usePgCtl>
                 </configuration>
                 <executions>
                     <execution>
