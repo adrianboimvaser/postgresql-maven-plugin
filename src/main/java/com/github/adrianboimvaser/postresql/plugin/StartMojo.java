@@ -23,6 +23,9 @@ public class StartMojo extends PgctlMojo {
     @Parameter
     private String username;
 
+    @Parameter
+    private boolean usePgCtl;
+
     @Override
     public void doExecute() throws MojoExecutionException {
 
@@ -99,7 +102,12 @@ public class StartMojo extends PgctlMojo {
 
     private List<String> createPostgresCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
-        cmd.add(getCommandPath("postgres"));
+
+        if (usePgCtl) {
+            cmd.add(getCommandPath("pg_ctl"));
+        } else {
+            cmd.add(getCommandPath("postgres"));
+        }
 
         cmd.add("-D");
         cmd.add(dataDir);
@@ -107,6 +115,11 @@ public class StartMojo extends PgctlMojo {
         if (port != null) {
             cmd.add("-p");
             cmd.add(port.toString());
+        }
+
+        if (usePgCtl) {
+            cmd.add("-w");
+            cmd.add("start");
         }
 
         return cmd;

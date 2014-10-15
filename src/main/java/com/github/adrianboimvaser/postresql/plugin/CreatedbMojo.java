@@ -21,6 +21,12 @@ public class CreatedbMojo extends PgsqlMojo {
     @Parameter
     protected Integer port;
 
+    @Parameter
+    protected String encoding;
+
+    @Parameter
+    protected String locale;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().debug("Skipped.");
@@ -54,6 +60,16 @@ public class CreatedbMojo extends PgsqlMojo {
         if (username != null) {
             cmd.add("-U");
             cmd.add(username);
+        }
+
+        if (encoding != null) {
+            cmd.add("--encoding");
+            cmd.add(encoding);
+        }
+
+        if (locale != null) {
+            cmd.add("--locale");
+            cmd.add(locale);
         }
 
         cmd.add(databaseName);
