@@ -1,4 +1,4 @@
-package com.github.adrianboimvaser.postresql.plugin;
+package com.github.adrianboimvaser.postgresql.plugin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,10 +23,18 @@ public class StartMojo extends PgctlMojo {
     @Parameter
     private String username;
 
+    @Parameter
+    private Integer timeoutInSeconds;
+
+    private transient long timeout;
+
     @Override
     public void doExecute() throws MojoExecutionException {
 
         List<String> cmd = createPostgresCommand();
+        if (getLog().isDebugEnabled()) {
+            getLog().debug(cmd.toString());
+        }
 
         ProcessBuilder processBuilder = new ProcessBuilder(cmd);
 
@@ -37,10 +45,13 @@ public class StartMojo extends PgctlMojo {
                 sendOutputToLogFile(process);
             }
             destroyOnShutdown(process);
+            if (timeoutInSeconds != null) {
+                timeout = System.currentTimeMillis() + (timeoutInSeconds.longValue() * 1000L);
+            }
 
             // Wait for the server to start before returning
             while (!started()) {
-                Thread.sleep(1000);
+                Thread.sleep(1000L);
             }
             getLog().info("server started");
 
@@ -66,14 +77,24 @@ public class StartMojo extends PgctlMojo {
         });
     }
 
-    private boolean started() {
+    private boolean started() throws InterruptedException {
+        final long now = System.currentTimeMillis();
+        if (timeoutInSeconds != null && now >= timeout) {
+            throw new InterruptedException("timeout reached (" + timeoutInSeconds + "s)");
+        }
         // As mentioned in http://www.postgresql.org/docs/9.0/static/app-pg-ctl.html
         // a successful psql -l indicates success.
         try {
             List<String> cmd = createPsqlCommand();
             ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-            Process process = processBuilder.start();
-            process.waitFor();
+            final Process process = processBuilder.start();
+            if (timeoutInSeconds == null) {
+                process.waitFor();
+            } else {
+                synchronized (process) { // prevent IllegalMonitorStateException
+                    process.wait(timeout - now);
+                }
+            }
             return process.exitValue() == 0;
         } catch (Exception e) {
             throw new RuntimeException(e);

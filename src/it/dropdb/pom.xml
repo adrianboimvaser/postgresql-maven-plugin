@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.adrianboimvaser.it</groupId>
-    <artifactId>start-stop</artifactId>
+    <artifactId>initdb</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <description>Integration test for start and stop goals.</description>
+    <description>Integration test for initdb goal.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,12 +22,11 @@
                 <configuration>
                     <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
                     <dataDir>${project.build.directory}/data</dataDir>
-                    <logfile>${project.build.directory}/postgres.log</logfile>
                     <username>postgres</username>
                     <passwordFile>password.txt</passwordFile>
-                    <timeoutInSeconds>60</timeoutInSeconds>
                     <encoding>UTF8</encoding>
                     <locale>sv_SE</locale>
+                    <databaseName>createanddrop</databaseName>
                 </configuration>
                 <executions>
                     <execution>
@@ -45,57 +44,36 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>createdb</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>createdb</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>dropdb</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>dropdb</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>dropdb2</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>dropdb</goal>
+                        </goals>
+                        <configuration>
+                            <if-exists>true</if-exists>
+                            <noPassword>true</noPassword>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>stop-postgresql</id>
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>stop</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>9.2-1002-jdbc4</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost/postgres</url>
-                    <username>postgres</username>
-                    <password>secret</password>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <sqlCommand>SELECT * FROM
-                                information_schema.tables</sqlCommand>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>encoding-check</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>${project.build.directory}/sql-output.csv</outputFile>
-                            <printResultSet>true</printResultSet>
-                            <sqlCommand>
-                                select encoding, pg_encoding_to_char(encoding), datcollate, datdba
-                                from pg_database where datname = current_database();
-                            </sqlCommand>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

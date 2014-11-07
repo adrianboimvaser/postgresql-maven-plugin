@@ -1,4 +1,4 @@
-package com.github.adrianboimvaser.postresql.plugin;
+package com.github.adrianboimvaser.postgresql.plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +27,10 @@ public class InitdbMojo extends PgsqlMojo {
     @Parameter
     protected String locale;
 
+    /** The {@code --data-checksums} option was added in PostgreSQL 9.3. Will be used if present and not {@code false}. */
+    @Parameter(alias = "data-checksums", property = "data-checksums", defaultValue = "false")
+    protected boolean dataChecksums;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
             getLog().debug("Skipped.");
@@ -34,17 +38,27 @@ public class InitdbMojo extends PgsqlMojo {
         }
 
         final List<String> cmd = createCommand();
+        if (getLog().isDebugEnabled()) {
+            getLog().debug(cmd.toString());
+        }
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+        String message = "";
+        Exception cause = null;
+        int returnValue = Integer.MIN_VALUE;
         try {
             Process process = processBuilder.start();
             logOutput(process);
-            int returnValue = process.waitFor();
-            getLog().debug("initdb returned " + returnValue);
-        } catch (IOException e) {
+            returnValue = process.waitFor();
+            message = "initdb returned " + returnValue;
+            getLog().debug(message);
+        } catch (IOException|InterruptedException e) {
+            cause = e;
+            message = e.getLocalizedMessage();
             getLog().error(e);
-        } catch (InterruptedException e) {
-            getLog().error(e);
+        }
+        if (returnValue != 0 && failOnError) {
+            throw new MojoExecutionException(message, cause);
         }
     }
 
@@ -73,6 +87,10 @@ public class InitdbMojo extends PgsqlMojo {
         if (locale != null) {
             cmd.add("--locale");
             cmd.add(locale);
+        }
+
+        if (dataChecksums) {
+            cmd.add("--no-password");
         }
 
         return cmd;

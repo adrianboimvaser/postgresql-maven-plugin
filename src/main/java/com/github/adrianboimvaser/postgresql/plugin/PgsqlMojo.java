@@ -1,4 +1,4 @@
-package com.github.adrianboimvaser.postresql.plugin;
+package com.github.adrianboimvaser.postgresql.plugin;
 
 import java.io.File;
 
@@ -13,6 +13,18 @@ public abstract class PgsqlMojo extends AbstractMojo {
 
     @Parameter
     protected boolean skip;
+
+    /** By default, most failed operations will not fail the build. This enables build failure. */
+    @Parameter
+    protected boolean failOnError;
+
+    public PgsqlMojo() {
+        //
+    }
+
+    public PgsqlMojo(String pgsqlHome) {
+        this.pgsqlHome = pgsqlHome;
+    }
 
     protected String getCommandPath(String command) throws MojoExecutionException {
 

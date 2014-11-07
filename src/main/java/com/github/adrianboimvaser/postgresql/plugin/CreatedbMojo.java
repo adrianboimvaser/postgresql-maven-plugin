@@ -1,4 +1,4 @@
-package com.github.adrianboimvaser.postresql.plugin;
+package com.github.adrianboimvaser.postgresql.plugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,20 @@ public class CreatedbMojo extends PgsqlMojo {
     protected String databaseName;
 
     @Parameter
+    protected String description;
+
+    @Parameter
+    protected String host;
+
+    @Parameter
     protected Integer port;
+
+    @Parameter
+    protected String template;
+
+    /** If specified, password prompts are disabled (may result in an error) */
+    @Parameter(alias = "no-password", property = "no-password", defaultValue = "false")
+    protected boolean noPassword;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -28,23 +41,38 @@ public class CreatedbMojo extends PgsqlMojo {
         }
 
         final List<String> cmd = createCommand();
+        if (getLog().isDebugEnabled()) {
+            getLog().debug(cmd.toString());
+        }
 
         final ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+        String message = "";
+        Exception cause = null;
+        int returnValue = Integer.MIN_VALUE;
         try {
             Process process = processBuilder.start();
             logOutput(process);
-            int returnValue = process.waitFor();
-            getLog().debug("createdb returned " + returnValue);
-        } catch (IOException e) {
+            returnValue = process.waitFor();
+            message = "createdb returned " + returnValue;
+            getLog().debug(message);
+        } catch (IOException|InterruptedException e) {
+            message = e.getLocalizedMessage();
+            cause = e;
             getLog().error(e);
-        } catch (InterruptedException e) {
-            getLog().error(e);
+        }
+        if (returnValue != 0 && failOnError) {
+            throw new MojoExecutionException(message, cause);
         }
     }
 
     private List<String> createCommand() throws MojoExecutionException {
         List<String> cmd = new ArrayList<String>();
         cmd.add(getCommandPath("createdb"));
+
+        if (host != null) {
+            cmd.add("-h");
+            cmd.add(host);
+        }
 
         if (port != null) {
             cmd.add("-p");
@@ -56,7 +84,19 @@ public class CreatedbMojo extends PgsqlMojo {
             cmd.add(username);
         }
 
+        if (template != null) {
+            cmd.add("-T");
+            cmd.add(template);
+        }
+
+        if (noPassword) {
+            cmd.add("--no-password");
+        }
+
         cmd.add(databaseName);
+        if (description != null) {
+            cmd.add(description);
+        }
 
         return cmd;
     }
