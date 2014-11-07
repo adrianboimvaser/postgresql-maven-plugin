@@ -13,11 +13,6 @@ public class PgsqlMojoTest {
         }
     };
 
-    @Test
-    public void testGetCommandPath() throws MojoExecutionException {
-        assertTrue(mojo.getCommandPath("pg_ctl").endsWith("/bin/pg_ctl"));
-    }
-
     @Test(expected = MojoExecutionException.class)
     public void testGetCommandPathFail() throws MojoExecutionException {
         assertFalse(new PgsqlMojo("\\\\\\\\\\\\\\\\\\\\\\") {
