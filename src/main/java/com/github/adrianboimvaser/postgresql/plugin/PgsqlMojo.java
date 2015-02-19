@@ -14,9 +14,9 @@ public abstract class PgsqlMojo extends AbstractMojo {
     @Parameter
     protected boolean skip;
 
-    /** By default, most failed operations will not fail the build. This enables build failure. */
+    /** By default, all failed operations will fail the build. Set failOnError to false to disable build failure. */
     @Parameter
-    protected boolean failOnError;
+    protected boolean failOnError = true;
 
     public PgsqlMojo() {
         //
