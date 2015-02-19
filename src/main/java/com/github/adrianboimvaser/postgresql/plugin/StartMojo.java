@@ -1,9 +1,11 @@
 package com.github.adrianboimvaser.postgresql.plugin;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,12 +53,46 @@ public class StartMojo extends PgctlMojo {
 
             // Wait for the server to start before returning
             while (!started()) {
+                if (!isAlive(process)) {
+                    throw new RuntimeException(
+                            "PostgreSQL server exited with exit value: " + process.exitValue()
+                                    + " and error message: " + getErrorMessages(process));
+                }
+
                 Thread.sleep(1000L);
+                getLog().info("Waiting for server to start.");
             }
-            getLog().info("server started");
+            getLog().info("Server started");
 
         } catch (Exception e) {
-            getLog().error(e);
+            String message = "Can't start PostgreSQL using command: " + cmd;
+
+            if (failOnError) {
+                throw new MojoExecutionException(message, e);
+            }
+            getLog().error(message, e);
+        }
+    }
+
+    // TODO replace with Joiner and Stream from Java 8
+    private String getErrorMessages(Process process) throws IOException {
+        StringBuilder errorMessage = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                errorMessage.append(line).append(' ');
+            }
+        }
+        return errorMessage.toString();
+    }
+
+    // TODO replace with Process.isAlive() from Java 8
+    private boolean isAlive(Process process) {
+        try {
+            process.exitValue();
+            return false;
+        } catch (Exception e) {
+            return true;
         }
     }
 
