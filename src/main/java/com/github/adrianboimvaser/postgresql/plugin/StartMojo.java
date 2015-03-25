@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -25,6 +26,9 @@ public class StartMojo extends PgctlMojo {
 
     @Parameter
     private Integer timeoutInSeconds;
+
+    @Parameter
+    private Map<String, String> parameters;
 
     private transient long timeout;
 
@@ -128,6 +132,13 @@ public class StartMojo extends PgctlMojo {
         if (port != null) {
             cmd.add("-p");
             cmd.add(port.toString());
+        }
+
+        if (parameters != null) {
+            for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                cmd.add("-c");
+                cmd.add(entry.getKey() + "=" + entry.getValue());
+            }
         }
 
         return cmd;
