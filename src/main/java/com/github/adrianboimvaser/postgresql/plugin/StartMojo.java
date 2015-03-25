@@ -136,8 +136,10 @@ public class StartMojo extends PgctlMojo {
 
         if (parameters != null) {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                cmd.add("-c");
-                cmd.add(entry.getKey() + "=" + entry.getValue());
+                if (!"port".equals(entry.getKey())) {
+                    cmd.add("-c");
+                    cmd.add(entry.getKey() + "=" + entry.getValue());
+                }
             }
         }
 
