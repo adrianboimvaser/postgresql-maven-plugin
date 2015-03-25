@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.adrianboimvaser.it</groupId>
+    <artifactId>start-with-parameters</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <description>Integration test for start and stop goals with custom runtime parameters.</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>@project.groupId@</groupId>
+                <artifactId>@project.artifactId@</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <pgsqlHome>@project.build.directory@/pgsql</pgsqlHome>
+                    <dataDir>${project.build.directory}/data</dataDir>
+                    <logfile>${project.build.directory}/postgres.log</logfile>
+                    <username>postgres</username>
+                    <passwordFile>password.txt</passwordFile>
+                    <timeoutInSeconds>60</timeoutInSeconds>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>initdb</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>initdb</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>start-postgresql</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <parameters>
+                                <!-- Configure a custom logging setup since this requires a few properties to be set correctly together, and we can test against it -->
+                                <!-- See http://www.postgresql.org/docs/9.4/static/runtime-config-file-locations.html -->
+                                <config_file>${project.basedir}/postgresql.conf</config_file> <!-- Sets logging_collector and log_filename -->
+                                <log_directory>${project.build.directory}</log_directory>
+                                <port>9999</port> <!-- This should be ignored by the goal execution -->
+                            </parameters>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-postgresql</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.2-1002-jdbc4</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://localhost/postgres</url>
+                    <username>postgres</username>
+                    <password>secret</password>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <sqlCommand>SELECT * FROM
+                                information_schema.tables</sqlCommand>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
